@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from forms import LoginForm
 from datetime import datetime
 
+#comment
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '1b64fb8cbda13b37a1ea9a61e725c872'
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///site.db'
