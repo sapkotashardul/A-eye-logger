@@ -5,24 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+	
 	<title></title>
 
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 	
+
 </head>
 <body>
-	<header class="site-header">
+	<header class="site-header" style="padding-bottom:15px">
 		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+			<img src="/static/logo.png" style="padding: 10px; padding-left: 50px; ">
   			<div class="container">
-  				<div class="collapse navbar-collapse" id="navbarToggle">
-  					<!-- <img src="/static/logo.png"> -->
-  				<div class="navbar-nav">
+
+  				<div class="collapse navbar-collapse" id="navbarToggle" style="position:relative;" >
+  					
+
 					{% if current_user.is_authenticated %}
-						<a class="nav-item nav-link text-white" href="{{ url_for('logout') }}" >Enter a new key</a>
+						<a class="text-white" href="{{ url_for('logout') }}" style="font-size : 20px; position:absolute; right:0;">Enter a new key</a>
 					{% endif %}
-				</div>
+
 			</div>	
 		</div>		
 		</nav>
