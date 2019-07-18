@@ -1,7 +1,13 @@
 from datetime import datetime
-from a_eye import db
+from a_eye import db, login_manager
+from flask_login import UserMixin
 
-class Studies(db.Model):
+@login_manager.user_loader
+def load_study(study_id):
+	return Studies.query.get(int(study_id))
+
+class Studies(db.Model, UserMixin):
+	__tablename__ = 'studies'
 	id =  db.Column(db.Integer, primary_key=True)
 	key = db.Column(db.String(16), unique=True, nullable=False)
 	startingDate = db.Column(db.DateTime, nullable=False)
@@ -9,9 +15,10 @@ class Studies(db.Model):
 	sequences = db.relationship('Sequences', backref='author', lazy=True)
 
 	def __repr__(self):
-		return f"Studies('{self.startingDate}','{self.endingDate}')"
+		return f"Studies('{self.id}', '{self.key}','{self.startingDate}','{self.endingDate}','{self.sequences}')"
 
 class Sequences(db.Model):
+	__tablename__ = 'sequences'
 	id =  db.Column(db.Integer, primary_key=True)
 	scene = db.Column(db.String(20), nullable=False)
 	cognitiveLoad = db.Column(db.Integer, nullable=False)

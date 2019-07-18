@@ -1,9 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
-	{% for post in posts %}
-		<h1>{{ post.title }}</h1>
-		<p> By {{ post.author}} on {{post.date_posted}}</p>
-		<p> {{post.content}}</p>
-		pouet
-	{% endfor%}
+	{% if current_user.is_authenticated %}
+		{% for post in posts %}
+
+			<h1>{{ post.title }}</h1>
+			<p> By {{ post.author}} on {{post.date_posted}}
+				{{ current_user }}
+			</p>
+			<p> {{post.content}}</p>
+			pouet
+		{% endfor%}
+	{% else %}
+		<p>You datas aren't collected yet. Please enter your key in the login page :</p>
+		<a href="{{url_for('login') }}"> Let's enter my key !</a>
+	{% endif %}
 {% endblock content %}
