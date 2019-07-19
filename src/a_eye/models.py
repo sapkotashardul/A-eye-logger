@@ -29,5 +29,5 @@ class Sequences(db.Model):
 
 
 	def __repr__(self):
-		return f"Sequence('{self.scene}','{self.cognitiveLoad}','{self.focusPoint}','{self.startingDate}','{self.endingDate}')"
+		return f"Sequence('{self.scene}','{self.cognitiveLoad}','{self.focusPoint}','{self.startingDate}','{self.endingDate}','{self.id_study}')"
 		

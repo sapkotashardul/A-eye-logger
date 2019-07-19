@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 	{% if current_user.is_authenticated %}
-		{% for post in posts %}
+		<!-- {% for post in posts %}
 
 			<h1>{{ post.title }}</h1>
 			<p> By {{ post.author}} on {{post.date_posted}}
@@ -9,7 +9,17 @@
 			</p>
 			<p> {{post.content}}</p>
 			pouet
+		{% endfor%} -->
+		<p>Your datas</p>
+		{% for sequence in sequences %}
+
+			<h1>{{ sequence.scene }}</h1>
+			<p> From {{ sequence.startingDate}} to {{sequence.endingDate}} <br>
+				Cognitive load : {{ sequence.cognitiveLoad }} <br>
+				Focus point: {{ sequence.focusPoint }} <br>
+			</p>
 		{% endfor%}
+
 	{% else %}
 		<p>You datas aren't collected yet. Please enter your key in the login page :</p>
 		<a href="{{url_for('login') }}"> Let's enter my key !</a>

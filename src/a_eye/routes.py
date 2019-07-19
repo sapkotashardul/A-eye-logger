@@ -17,7 +17,8 @@ posts={
 def dashboard():
 	if current_user.is_authenticated:
 		sequences = Sequences.query.filter_by(author=current_user)
-	return render_template('dashboard.html', posts=posts)
+		print(sequences)
+	return render_template('dashboard.html', sequences=sequences)
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -29,6 +30,7 @@ def login():
 		study = Studies.query.filter_by(key=form.code.data).first()
 		if study:
 			login_user(study,True)
+			sequences_1 = Sequences.query.filter_by(author=study)
 			flash('Your datas has been collected !', 'success')
 			return redirect(url_for('dashboard'))
 		else:
@@ -51,7 +53,7 @@ def logout():
 #	study = Studies(key=uniq_key, startingDate=studyStartingDate, endingDate=studyEndingDate)
 #	db.session.add(study)
 #	for data in datas
-#		sequence = Sequences(scene=data.scene, cognitiveLoad=data.cognitiveLoad, focusPoint=fata.focusPoint, startingDate=data.startingDate, endingDate=data.endingDate)
+#		sequence = Sequences(scene=data.scene, cognitiveLoad=data.cognitiveLoad, focusPoint=fata.focusPoint, startingDate=data.startingDate, endingDate=data.endingDate, author=study)
 #		db.session.add(sequence)
 #	db.session.commit()
 
