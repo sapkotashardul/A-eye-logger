@@ -193,8 +193,16 @@
 {% block content %}
 	{% if current_user.is_authenticated %}
 
-	
-		<h1>Your datas</h1>
+	<div class="row">
+        <div class='col-sm'>
+		      <h1>Your datas</h1>
+        </div>
+        <div class='col-sm'>
+            <a href="/static/csv/data{{current_user.key[:8]}}.csv" download="yourdatas" download>
+                <button type="button" class="btn btn-outline-success" style="float: right;"><img src="static/csv_logo.png" style="padding : 5px; padding-top: 3px; padding-right: 10px;"><span class="downloaditem" style="font-size: 20px;">Download</span></button>
+                </a>
+            </div> 
+        </div>
 
 		<div class="row">
 			<div class='col-sm'>
@@ -219,7 +227,7 @@
 
 		    <div id="collapse{{ sequence['category_scene'] }}" class="collapse show" aria-labelledby="{{ sequence['category_scene'] }}" data-parent="#accordionExample">
 		      	<div class="card-body">
-				        <div class="row">
+				 <div class="row">
 					<div class='col-sm'>
 						<div id="cognitiveLoadPiechart{{sequence['category_scene']}}" style="width: 400px; height: 400px;"></div>
 					</div>
