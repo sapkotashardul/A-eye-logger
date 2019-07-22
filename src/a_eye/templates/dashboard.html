@@ -1,24 +1,238 @@
 {% extends "layout.html" %}
+
+{% block script %}
+	{% if current_user.is_authenticated %} 
+		<script type="text/javascript">
+
+			 
+
+		      google.charts.load('current', {'packages':['corechart']});
+		      google.charts.setOnLoadCallback(drawChart);
+
+		      function drawChart() {
+
+		        var cognitiveLoadChart = google.visualization.arrayToDataTable([
+		          ['Cognitive Load', 'Pourcentage of time'],
+		          ['Relaxed',  {{ pourcentage['relaxed'] }} ],
+		          ['Low cognitive load', {{ pourcentage['lowCognitiveLoad'] }}],
+		          ['High cognitive load', {{ pourcentage['highCognitiveLoad'] }}],
+		        ]);
+
+		        var focusPointChart = google.visualization.arrayToDataTable([
+		          ['Focus Point', 'Pourcentage of type'],
+		          ['No focus point',  {{ pourcentage['noFocusPoint'] }} ],
+		          ['One focus point', {{ pourcentage['oneFocusPoint'] }}],
+		          ['Multiple focus point', {{ pourcentage['multipleFocusPoint'] }}],
+		        ]);
+
+
+		        var cognitiveLoadChartOptions = {
+		          title: 'Cognitive Load',
+		          pieHole: 0.9,
+		          colors: ['#FFDB60', '#FF8356', '#DB3E1B'],
+		        };
+
+		        var focusPointChartOptions = {
+		          title: 'Focus Point',
+		          pieHole: 0,
+		          colors: ['#FFDB60', '#FF8356', '#DB3E1B'],
+		        };
+
+		        var chart1 = new google.visualization.PieChart(document.getElementById('cognitiveLoadPiechart'));
+		        var chart2 = new google.visualization.PieChart(document.getElementById('focusPointPiechart'));
+
+		        chart1.draw(cognitiveLoadChart, cognitiveLoadChartOptions);
+		        chart2.draw(focusPointChart, focusPointChartOptions);
+
+		        {% for sequence in sequence_datas %}
+		        	 var cognitiveLoadChart_seq = google.visualization.arrayToDataTable([
+			          ['Cognitive Load', 'Pourcentage of time'],
+			          ['Relaxed',  {{ sequence['category_relaxed'] }} ],
+			          ['Low cognitive load', {{ sequence['category_lowCognitiveLoad'] }}],
+			          ['High cognitive load', {{ sequence['category_highCognitiveLoad'] }}],
+			        ]);
+
+			        var focusPointChart_seq = google.visualization.arrayToDataTable([
+			          ['Focus Point', 'Pourcentage of type'],
+			          ['No focus point',  {{ sequence['category_noFocusPoint'] }} ],
+			          ['One focus point', {{ sequence['category_oneFocusPoint'] }}],
+			          ['Multiple focus point', {{ sequence['category_multipleFocusPoint'] }}],
+			        ]);
+
+
+			        var cognitiveLoadChartOptions_seq = {
+			          title: 'Cognitive Load',
+			          pieHole: 0.9,
+			          colors: ['#FFDB60', '#FF8356', '#DB3E1B'],
+			        };
+
+			        var focusPointChartOptions_seq = {
+			          title: 'Focus Point',
+			          pieHole: 0,
+			          colors: ['#FFDB60', '#FF8356', '#DB3E1B'],
+			        };
+
+			        var chart1_seq = new google.visualization.PieChart(document.getElementById('cognitiveLoadPiechart{{sequence['category_scene']}}'));
+			        var chart2_seq = new google.visualization.PieChart(document.getElementById('focusPointPiechart{{sequence['category_scene']}}'));
+
+			        chart1_seq.draw(cognitiveLoadChart_seq, cognitiveLoadChartOptions_seq);
+			        chart2_seq.draw(focusPointChart_seq, focusPointChartOptions_seq);
+
+		      	{% endfor %}
+		      }
+    	</script>
+    	<script type="text/javascript">
+    		  google.charts.load('current', {'packages':['timeline']});
+		      google.charts.setOnLoadCallback(drawChart);
+		      function drawChart() {
+		      	{% for sequence in sequence_datas %}
+			        var container = document.getElementById('timeline{{sequence['category_scene']}}');
+			        var chart = new google.visualization.Timeline(container);
+			        var dataTable = new google.visualization.DataTable();
+
+			        dataTable.addColumn({ type: 'string', id: 'President' });
+			        dataTable.addColumn({ type: 'string', id: 'dummy bar label' });
+        			dataTable.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			        dataTable.addColumn({ type: 'date', id: 'Start' });
+			        dataTable.addColumn({ type: 'date', id: 'End' });
+
+			        var data = [
+			        	['Total',null,'Total',new Date({{sequence['category_startingDate']}}),new Date({{sequence['category_endingDate']}})],
+			        	
+			        		{% for d in sequence['category_dates_sequences'] %}
+          						['{{d[0]}}',null,createCustomHTMLContent('{{d[0]}}', new Date({{d[1]}}), new Date({{d[2]}}), {{ d[3] }}, {{ d[4] }}),new Date({{d[1]}}), new Date({{d[2]}})], 
+			        		{% endfor %}
+			    		]
+			    	
+			        dataTable.addRows(data);
+
+			        var options = {
+			        	tooltip: {isHtml: true},
+			        	colors: ['#FFDB60', '#FF8356', '#DB3E1B'],
+				    }
+			        chart.draw(dataTable,options);
+		        {% endfor %}
+
+
+			        var container = document.getElementById('timelinetotal');
+			        var chart = new google.visualization.Timeline(container);
+			        var dataTable = new google.visualization.DataTable();
+
+			        dataTable.addColumn({ type: 'string', id: 'President' });
+			        dataTable.addColumn({ type: 'string', id: 'dummy bar label' });
+        			dataTable.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+			        dataTable.addColumn({ type: 'date', id: 'Start' });
+			        dataTable.addColumn({ type: 'date', id: 'End' });
+
+			        var data = [
+			        {% for sequence in sequence_datas %}
+			        		{% for d in sequence['category_dates_sequences'] %}
+          						['{{d[0]}}',null,createCustomHTMLContent('{{d[0]}}', new Date({{d[1]}}), new Date({{d[2]}}), {{ d[3] }}, {{ d[4] }}),new Date({{d[1]}}), new Date({{d[2]}})], 
+			        		{% endfor %}
+			        	{% endfor %}
+			    		]
+			    	
+			        dataTable.addRows(data);
+
+			        var options = {
+			        	tooltip: {isHtml: true},
+			        	colors: ['#FFDB60', '#FF8356', '#DB3E1B'],
+				    }
+			        chart.draw(dataTable,options);
+		      
+		      }
+		      function createCustomHTMLContent(title, startDate, endDate, nbCognitiveLoad, nbFocusPoint) {
+			  if (nbCognitiveLoad==0){
+			  	cognitiveLoad = 'relaxed'
+			  }
+			  if (nbCognitiveLoad==1){
+			  	cognitiveLoad = 'low cognitive load'
+			  }
+			  if (nbCognitiveLoad ==2 ){
+			  	cognitiveLoad = 'high cognitive load'
+			  }
+			  if(nbFocusPoint==0){
+			  	focusPoint = 'no focus point'
+			  }
+			  if(nbFocusPoint==1){
+			  	focusPoint = 'one focus point'
+			  }
+			  if(nbFocusPoint==2){
+			  	focusPoint = 'multiple focus point'
+			  }
+
+			  function appendLeadingZeroes(n){
+				  if(n <= 9){
+				    return "0" + n;
+				  }
+				  return n
+				}
+
+			  let formatted_startDate = startDate.getFullYear() + "-" + (startDate.getMonth() + 1) + "-" + startDate.getDate() + " " + appendLeadingZeroes(startDate.getHours()) + ":" + appendLeadingZeroes(startDate.getMinutes()) + ":" + appendLeadingZeroes(startDate.getSeconds()) 
+			  let formatted_endDate = endDate.getFullYear() + "-" + (endDate.getMonth() + 1) + "-" + endDate.getDate() + " " + appendLeadingZeroes(endDate.getHours()) + ":" + appendLeadingZeroes(endDate.getMinutes()) + ":" + appendLeadingZeroes(endDate.getSeconds()) 
+			  
+			  
+			  
+			  return '<div style="min-width: 230px; padding:10px 10px 10px 10px;">' +
+			      '<h3>'+ title + '</h3>' +
+			      '<table class="medals_layout">' + '<tr>' +
+			      '<td>From :</td>' +
+			      '<td><b>' + formatted_startDate + '</b></td>' + '</tr>' + '<tr>' +
+			      '<td>To :</td>' +
+			      '<td><b>' + formatted_endDate + '</b></td>' + '</tr>' + '<tr>' +
+			      '<td>Duration :</td>' +
+			      '<td><b>' + cognitiveLoad + '</b></td>' + '</tr>' + '<tr>' +
+			      '<td>Focus point :</td>' +
+			      '<td><b>' + focusPoint + '</b></td>' + '</tr>' + '</table>' + '</div>';
+			}
+		</script>  
+    {% endif %}
+{% endblock %}
+
+
 {% block content %}
 	{% if current_user.is_authenticated %}
-		<!-- {% for post in posts %}
 
-			<h1>{{ post.title }}</h1>
-			<p> By {{ post.author}} on {{post.date_posted}}
-				{{ current_user }}
-			</p>
-			<p> {{post.content}}</p>
-			pouet
-		{% endfor%} -->
-		<p>Your datas</p>
-		{% for sequence in sequences %}
+	
+		<h1>Your datas</h1>
 
-			<h1>{{ sequence.scene }}</h1>
-			<p> From {{ sequence.startingDate}} to {{sequence.endingDate}} <br>
-				Cognitive load : {{ sequence.cognitiveLoad }} <br>
-				Focus point: {{ sequence.focusPoint }} <br>
-			</p>
+		<div class="row">
+			<div class='col-sm'>
+				<div id="cognitiveLoadPiechart" style="width: 500px; height: 400px;"></div>
+			</div>
+			<div class='col-sm'>
+				<div id="focusPointPiechart" style="width: 500px; height: 400px;"></div>
+			</div>
+			<div id="timelinetotal" style="height: 180px;"></div>
+		</div>
+
+		<div class="accordion" id="accordionExample">
+		{% for sequence in sequence_datas %}
+		  <div class="card">
+		    <div class="card-header" id="{{ sequence['category_scene'] }}">
+		      <h2 class="mb-0">
+		        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ sequence['category_scene'] }}" aria-expanded="true" aria-controls="collapse{{ sequence['category_scene'] }}">
+		          {{ sequence['category_scene'] }}
+		        </button>
+		      </h2>
+		    </div>
+
+		    <div id="collapse{{ sequence['category_scene'] }}" class="collapse show" aria-labelledby="{{ sequence['category_scene'] }}" data-parent="#accordionExample">
+		      	<div class="card-body">
+				        <div class="row">
+					<div class='col-sm'>
+						<div id="cognitiveLoadPiechart{{sequence['category_scene']}}" style="width: 400px; height: 400px;"></div>
+					</div>
+					<div class='col-sm'>
+						<div id="focusPointPiechart{{sequence['category_scene']}}" style="width: 400px; height: 400px;"></div>
+					</div>
+				</div>
+		        <div id="timeline{{sequence['category_scene']}}" style="height: 180px;"></div>
+		      </div>
+		    </div>
+		  </div>
 		{% endfor%}
+		</div>
 
 	{% else %}
 		<p>You datas aren't collected yet. Please enter your key in the login page :</p>
