@@ -93,7 +93,7 @@ def login():
             fields = ['scene', 'startingDate', 'endingDate', 'cognitiveLoad', 'focusPoint'] 
               
             # name of csv file 
-            filename = "a_eye/csv/data"+name+".csv"
+            filename = "a_eye/static/csv/data"+name+".csv"
               
             # writing to csv file 
             with open(filename, 'w') as csvfile: 
